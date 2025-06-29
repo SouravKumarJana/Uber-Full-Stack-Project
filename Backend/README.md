@@ -8,8 +8,6 @@ This endpoint registers a new user by validating the provided data and creating 
 ### Endpoint 
 **POST /users/register**
 
-Method:  http
-
 ### Headers
 - Content-Type: application/json
 
@@ -74,3 +72,78 @@ If any validation errors occur (e.g., invalid email, short firstname, or passwor
 ## Notes
 - Ensure that the JSON payload strictly follows the required schema.
 - The field "fullname.lastname" is optional.
+
+---
+
+# /users/login Endpoint Documentation
+
+## Description
+This endpoint authenticates a user using their email and password. On success, it returns an authentication token and user data.
+
+## Request
+
+### Endpoint
+**POST /users/login**
+
+### Headers
+- Content-Type: application/json
+
+### Body
+Payload should be in JSON format with the following structure:
+```json
+{
+  "email": "example@example.com",      // Required, must be a valid email.
+  "password": "yourpassword"           // Required, minimum 6 characters.
+}
+```
+
+## Responses
+
+### Success - 200 OK
+```json
+{
+  "token": "<JWT Token>",
+  "user": {
+    "_id": "user_id_string",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "example@example.com",
+    "createdAt": "2024-06-01T12:00:00.000Z",
+    "updatedAt": "2024-06-01T12:00:00.000Z"
+    // ...other user fields...
+  }
+}
+```
+
+### Error - 400 Bad Request
+If any validation errors occur (e.g., invalid email or password format), the endpoint returns:
+```json
+{
+  "errors": [
+    {
+      "msg": "Invalid Email",
+      "param": "email",
+      // ...additional error details...
+    },
+    {
+      "msg": "Password must be atleast 6 characters long",
+      "param": "password",
+      // ...additional error details...
+    }
+  ]
+}
+```
+
+### Error - 401 Unauthorized
+If the email or password is incorrect:
+```json
+{
+  "message": "Invalid Email or Password"
+}
+```
+
+## Notes
+- Both fields are required.
+- Ensure the email is registered and the password is correct.
