@@ -1,6 +1,8 @@
 const User = require('../models/user.model');
 const userService = require('../services/user.service');
 const { validationResult } = require('express-validator');
+const BlacklistTokenModel = require('../models/blacklistToken.model');
+
 
 module.exports.registerUser = async (req , res, next) =>{
     const errors = validationResult(req);    /* [ body('email').isEmail().withMessage("Invalid Email"),  
@@ -22,7 +24,7 @@ module.exports.registerUser = async (req , res, next) =>{
     });
 
     const token = user.generateAuthToken();    // create a access token
-
+    
     res.status(201).json({token, user});       // send token and user-data at response
 
 }
@@ -50,7 +52,29 @@ module.exports.loginUser = async(req, res, next) =>{
         return res.status(401).json({ message: "Invalid Email or Password"});
     }     
     
+    
     const token = user.generateAuthToken();
+    const options = {
+        httpOnly: true,          // we only modify the cookie at server cant modify at frontend
+        secure: true
+    }
+
+    res.cookie('token', token, options);                // set the token at cookie
     res.status(200).json({ token, user});
 
+}
+
+
+module.exports.getUserProfile = async(req, res, next) =>{
+    res.status(200).json(req.user);
+}
+
+
+module.exports.logoutUser = async(req, res, next) =>{
+    res.clearCookie('token');                         // clear the token property from cookie
+    const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
+
+    await BlacklistTokenModel.create({token});    // Here actually  we  send the token at blacklistTokenModel
+    
+    res.status(200).json({message: 'Logged out'});  // now show the loggedout message
 }

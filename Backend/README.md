@@ -147,3 +147,81 @@ If the email or password is incorrect:
 ## Notes
 - Both fields are required.
 - Ensure the email is registered and the password is correct.
+
+---
+
+# /users/profile Endpoint Documentation
+
+## Description
+This endpoint retrieves the authenticated user's profile information. Requires authentication.
+
+## Request
+
+### Endpoint
+**GET /users/profile**
+
+### Headers
+- Authorization: Bearer <JWT_TOKEN>
+- Cookie: token=<JWT_TOKEN> (alternative)
+
+## Responses
+
+### Success - 200 OK
+```json
+{
+  "_id": "user_id_string",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "example@example.com",
+  "createdAt": "2024-06-01T12:00:00.000Z",
+  "updatedAt": "2024-06-01T12:00:00.000Z"
+}
+```
+
+### Error - 401 Unauthorized
+If no token is provided or token is invalid:
+```json
+{
+  "message": "Unauthorized User"
+}
+```
+
+---
+
+# /users/logout Endpoint Documentation
+
+## Description
+This endpoint logs out the user by clearing the authentication token and blacklisting it. Requires authentication.
+
+## Request
+
+### Endpoint
+**GET /users/logout**
+
+### Headers
+- Authorization: Bearer <JWT_TOKEN>
+- Cookie: token=<JWT_TOKEN> (alternative)
+
+## Responses
+
+### Success - 200 OK
+```json
+{
+  "message": "Logged out"
+}
+```
+
+### Error - 401 Unauthorized
+If no token is provided or token is invalid:
+```json
+{
+  "message": "Unauthorized User"
+}
+```
+
+## Notes
+- The token is blacklisted and cannot be reused
+- Both cookie and Authorization header token are cleared
+- Blacklisted tokens expire after 24 hours
