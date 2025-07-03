@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
         fullname:{
             firstname:{
                 type: String,
-                require: true,
+                required: true,
                 minlength: [3, "First name must be atleast 3 charchters long"] 
             },
             lastname:{
@@ -17,12 +17,13 @@ const userSchema = new mongoose.Schema(
         },
         email:{
             type: String,
-            require: true,
+            lowercase: true,
+            required: true,
             minlength: [6, "Email must be atleast 6 charchters long"]
         },
         password:{
             type: String,
-            require: true,
+            required: true,
             select: false    // when you find this user , the pasword field not pass 
         },
         socketId:{
@@ -37,7 +38,7 @@ userSchema.methods.generateAuthToken = function(){
     return token;
 }
 
-userSchema.statics.hashPassword = async function (password) {    //In Mongoose, statics is used to define static methods on a schema, which are methods that can be called directly on the model (not on individual documents).
+userSchema.statics.hashPassword = async function (password) {    //In Mongoose, statics is used to define static methods on a schema, which are methods that can be called directly on the model (not on individual documents). // "statics" is model-level methods and "methods" is document-level methods
     return await bcrypt.hash(password, 10);
 }
 
