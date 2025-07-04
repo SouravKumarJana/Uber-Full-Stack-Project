@@ -72,14 +72,19 @@ module.exports.loginUser = async(req, res, next) =>{
 
 
 module.exports.getUserProfile = async(req, res, next) =>{
+    if (!req.user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    console.log(req.user);
     res.status(200).json(req.user);
 }
 
 
 module.exports.logoutUser = async(req, res, next) =>{
-    res.clearCookie('token');                         // clear the token property from cookie
     const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
 
+    res.clearCookie('token');                         // clear the token property from cookie
+    
     await BlacklistTokenModel.create({token});    // Here actually  we  send the token at blacklistTokenModel
     
     res.status(200).json({message: 'Logged out'});  // now show the loggedout message
