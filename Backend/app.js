@@ -8,6 +8,9 @@ const connectToDB = require('./db/db');
 const userRoutes = require('./routers/user.routes');
 const captainRoutes = require('./routers/captain.routes');
 
+const mapRoutes = require('./routers/map.routes');
+const rideRoute = require('./routers/ride.routes');
+
 const cookieParser = require('cookie-parser');
 connectToDB();
 
@@ -18,11 +21,13 @@ app.use(express.json());                             //To use req.body, you must
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 
-app.get('/', (req,res) =>{
+app.get('/', (req, res) =>{
     res.send("hello world");
 });
 
 app.use('/users', userRoutes);
-app.use('/captains',captainRoutes);
+app.use('/captains', captainRoutes);
+app.use('/maps', mapRoutes);
+app.use('/rides',rideRoute);
 
 module.exports = app;

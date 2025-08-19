@@ -46,7 +46,7 @@ module.exports.loginUser = async(req, res, next) =>{
     const {email, password} = req.body;
 
     const user = await User.findOne({ email }).select('+password')  // Here we try to check the email (that given by the user at login time ) is present or not in database  // findOne gives the all field of the User which email is the email that the user will give at time of login
-                                                                 // as at password field of User-model -> select: false , so password not come by-default , so ".select('+password')" is needed                                                          
+                                                                // as at password field of User-model -> select: false , so password not come by-default , so ".select('+password')" is needed                                                          
     if(!user) {
         return res.status(401).json({ message: "Invalid Email or Password"});
     }
@@ -75,7 +75,7 @@ module.exports.getUserProfile = async(req, res, next) =>{
     if (!req.user) {
         return res.status(404).json({ message: 'User not found' });
     }
-    console.log(req.user);
+    //console.log(req.user);
     res.status(200).json(req.user);
 }
 

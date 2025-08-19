@@ -13,7 +13,7 @@ const captainSchema = new mongoose.Schema(
             },
             lastname:{
                 type: String,
-                minlength: [6, "Last name must be atleast 6 charchters long"]
+                minlength: [2, "Last name must be atleast 2 charchters long"]
             }
         },    
         email:{
@@ -32,7 +32,7 @@ const captainSchema = new mongoose.Schema(
             minlength: [5, "password must be atleast 5 charchters long"],
             select: false
         },
-        sockedId:{
+        socketId:{
             type: String
         },
         status:{
@@ -68,10 +68,10 @@ const captainSchema = new mongoose.Schema(
             }
         },
         location:{
-            latitude:{
+            lat:{
                 type: Number  // when the captain is inactive , then latitude is not required
             },
-            longitude:{
+            lng:{
                 type: Number
             }
         }
